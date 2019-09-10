@@ -3,6 +3,7 @@ package com.example.customcalendar;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ public class CustomCalendarView extends LinearLayout {
     ImageButton mNextButton,mPreviousButton;
     TextView mCurrentDate;
 
-    //DBOpenHelper dpOpenHelper;
+    DBHelper dpOpenHelper;
     GridView gridLayoutDay;
 
     Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
@@ -91,7 +92,7 @@ public class CustomCalendarView extends LinearLayout {
                         final View addView = LayoutInflater.from(adapterView.getContext()).inflate(R.layout.add_event,null);
                         final EditText typeEvent = addView.findViewById(R.id.ed_type_event);
                         ImageButton btnSetTime = addView.findViewById(R.id.btn_set_time);
-                        EditText description = addView.findViewById(R.id.description);
+                        final EditText description = addView.findViewById(R.id.description);
                         Button buttonAddEvent = addView.findViewById(R.id.btn_add_event);
 
                         btnSetTime.setOnClickListener(new OnClickListener() {
@@ -115,15 +116,15 @@ public class CustomCalendarView extends LinearLayout {
                                 timePickerDialog.show();
                             }
                         });
-                        String date = dateFormat.format(dates.get(i));
-                        String month = monthFormat.format(dates.get(i));
-                        String year = yearFormat.format(dates.get(i));
+                        final String date = dateFormat.format(dates.get(i));
+                        final String month = monthFormat.format(dates.get(i));
+                        final String year = yearFormat.format(dates.get(i));
 
                         buttonAddEvent.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View view) {
-//                            saveEvent(typeEvent.getText().toString(),eventTime.toString(),date,month,year);
-//                            setUpCalender();
+                                saveEvent(typeEvent.getText().toString(),description.getText().toString(),date,month,year);
+                                SetUpCalender();
                                 alertDialog.dismiss();
                             }
                         });
@@ -137,6 +138,16 @@ public class CustomCalendarView extends LinearLayout {
                 }
             }
         });
+    }
+
+
+    private void saveEvent(String event, String description, String date, String month, String year) {
+        dpOpenHelper = new DBHelper(context);
+        SQLiteDatabase database = dpOpenHelper.getWritableDatabase();
+        dpOpenHelper.SaveEvent(event,description,date,month,year,database);
+        dpOpenHelper.close();
+        Toast.makeText(getContext(),"Event Saved", Toast.LENGTH_LONG).show();
+
     }
 
 

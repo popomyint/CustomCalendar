@@ -49,5 +49,4 @@
         android:background="#fff"
         android:id="@+id/btn_add_event"/>
 
-
 </LinearLayout>
