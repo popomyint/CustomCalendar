@@ -45,7 +45,7 @@ public class CustomCalendarView extends LinearLayout {
     List<Date> dates = new ArrayList<>();
     List<Events> events = new ArrayList<>();
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd", Locale.ENGLISH);
     SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
     SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.ENGLISH);
     SimpleDateFormat singleMonth = new SimpleDateFormat("M", Locale.ENGLISH);
@@ -153,8 +153,9 @@ public class CustomCalendarView extends LinearLayout {
 
 
     private void SetUpCalender() {
-        String currentDate = dateFormat.format(calendar.getTime());
-        mCurrentDate.setText(currentDate);
+        String yearDate = yearFormat.format(calendar.getTime());
+        String monthDate = monthFormat.format(calendar.getTime());
+        mCurrentDate.setText(monthDate + " " + yearDate);
         dates.clear();
         Calendar monthCalender = (Calendar) calendar.clone();
         monthCalender.set(Calendar.DAY_OF_MONTH,1);
